@@ -21,7 +21,7 @@
     </style>
   </head>
 
-  <body class="leading-normal tracking-normal text-indigo-400 m-6 bg-cover bg-fixed" style="background-image: url('header.png');">
+  <body class="leading-normal tracking-normal text-indigo-400 m-6 bg-cover bg-fixed bg-black" style="background-image: url('header.png');">
     <div class="h-full">
       <!--Nav-->
       <div class="w-full container mx-auto">
@@ -84,7 +84,7 @@ In essence, <span class="font-bold bg-clip-text text-transparent bg-gradient-to-
             <div class="flex items-center justify-between pt-4">
               <button
                 class="bg-gradient-to-r from-purple-800 to-green-500 hover:from-pink-500 hover:to-green-500 text-white font-bold py-2 px-4 rounded focus:ring transform transition hover:scale-105 duration-300 ease-in-out"
-                type="button"
+                type="submit"
               >
                 Sign Up
               </button>
@@ -115,5 +115,42 @@ In essence, <span class="font-bold bg-clip-text text-transparent bg-gradient-to-
         </div>
       </div>
     </div>
+
+  <script type="module">  
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js'
+
+// Initialize the Supabase client
+const supabase = createClient('https://ybkzecbaqkkkaulxuvga.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlia3plY2JhcWtra2F1bHh1dmdhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDA4MzQ2MzcsImV4cCI6MjAxNjQxMDYzN30.zJr6zk0pZVgQupSOm3WMg0AwvFpZw2cprfDvW82YTo4')
+
+// Get the form and email input elements
+const form = document.querySelector('form');
+const emailInput = document.getElementById('emailaddress');
+
+// Add an event listener to the form
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  // Insert the email into the newsletter subscriptions table
+  const { data, error } = await supabase
+    .from('newsletter_subscriptions')
+    .insert([
+      { email: emailInput.value },
+    ]);
+
+  // Check for errors
+  if (error) {
+    console.error('Error inserting email:', error.message);
+    // Notify the user of the failure
+    alert('Failed to store email. Please try again later or try with a different email');
+  } else {
+    console.log('Email inserted:', data);
+    // Notify the user of the success
+    alert('Email stored successfully!');
+  }
+
+  // Reset the form
+  form.reset();
+});
+  </script>
   </body>
 </html>
